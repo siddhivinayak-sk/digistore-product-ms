@@ -5,7 +5,7 @@ pipeline {
         stage('Clean') {
             steps {
                 echo "Clean Started"
-                sh(/mvn -file spring-boot-jwt\/pom.xml clean/)
+                sh(/mvn -file pom.xml clean/)
                 echo "Clean End"
             }
         }
@@ -13,7 +13,7 @@ pipeline {
         stage('Compile') {
             steps {
                 echo "Code Compilation Started"
-                sh(/mvn -file spring-boot-jwt\/pom.xml compile/)
+                sh(/mvn -file pom.xml compile/)
                 echo "Code Compilation End"
             }
         }
@@ -21,7 +21,7 @@ pipeline {
         stage('Test') {
             steps {
                 echo "Test Started"
-                sh(/mvn -file spring-boot-jwt\/pom.xml org.jacoco:jacoco-maven-plugin:prepare-agent test -Dmaven.test.failure.ignore=true/)
+                sh(/mvn -file pom.xml org.jacoco:jacoco-maven-plugin:prepare-agent test -Dmaven.test.failure.ignore=true/)
                 echo "Test End"
             }
         }
@@ -38,7 +38,7 @@ pipeline {
             steps {
                 echo "SonarQube Started"
                 withSonarQubeEnv('localSonarQube') {
-                    sh(/mvn -file spring-boot-jwt\/pom.xml  sonar:sonar  -Dmaven.test.skip=true/)
+                    sh(/mvn -file pom.xml  sonar:sonar  -Dmaven.test.skip=true/)
                 }
                 echo "SonarQube End"
             }
@@ -47,7 +47,7 @@ pipeline {
         stage('Result') {
             steps {
                 echo "Result Started"
-                junit '**/spring-boot-jwt/target/surefire-reports/TEST-*.xml'
+                junit '**/target/surefire-reports/TEST-*.xml'
                 echo "Result End"
             }
         }
@@ -55,7 +55,7 @@ pipeline {
         stage('Artifact Publish') {
             steps {
                 echo "Artifact Publish to Nexus Started"
-                sh(/mvn -file spring-boot-jwt\/pom.xml  deploy -Dmaven.test.skip=true/)
+                sh(/mvn -file pom.xml  deploy -Dmaven.test.skip=true/)
                 echo "Artifact Publish to Nexus End"
             }
         }
@@ -63,8 +63,8 @@ pipeline {
         stage('Build Image') {
             steps {
                 echo "Build Image Started"
-                sh(/mvn -file spring-boot-jwt\/pom.xml package -Dmaven.test.skip=true/)
-                sh(/docker build --build-arg VER=0.0.1 -f spring-boot-jwt\/dockerfile -t spring\/spring-boot-jwt:latest ./)
+                sh(/mvn -file pom.xml package -Dmaven.test.skip=true/)
+                sh(/docker build --build-arg VER=0.0.1 -f dockerfile -t digistore\/digistore-product-ms:latest ./)
                 echo "Build Image End"
             }
         }
@@ -72,7 +72,7 @@ pipeline {
         stage('Scan Image') {
             steps {
                 echo "Scan Image Started"
-                sh(/docker scan --file spring-boot-jwt\/dockerfile --json spring\/spring-boot-jwt:latest > spring-spring-boot-jwt_latest.json/)
+                sh(/docker scan --file dockerfile --json digistore\/digistore-product-ms:latest > digistore-product-ms_latest.json/)
                 echo "Scan Image End"
             }
         }
@@ -80,7 +80,7 @@ pipeline {
         stage('Tag Image') {
             steps {
                 echo "Tag Image Started"
-                sh(/docker tag spring\/spring-boot-jwt:latest hub.docker.local:5000\/spring\/spring-boot-jwt:latest/)
+                sh(/docker tag digistore\/digistore-product-ms:latest hub.docker.local:5000\/digistore\/digistore-product-ms:latest/)
                 echo "Tag Image End"
             }
         }
@@ -88,7 +88,7 @@ pipeline {
         stage('Push Image') {
             steps {
                 echo "Push Image Started"
-                sh(/docker push hub.docker.local:5000\/spring\/spring-boot-jwt:latest/)
+                sh(/docker push hub.docker.local:5000\/digistore\/digistore-product-ms:latest/)
                 echo "Push Image End"
             }
         }
