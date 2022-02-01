@@ -96,7 +96,7 @@ pipeline {
         stage('Status Before Deployment') {
             steps {
                 echo "Checking older service"
-                sh(/minikube kubectl -- -n bank-apps get all/)
+                sh(/minikube kubectl -- -n digistore get all/)
                 echo "Checked"
             }
         }
@@ -105,7 +105,7 @@ pipeline {
             steps {
                 echo "Undeploying older service"
                 catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-                    sh(/minikube kubectl -- -n bank-apps delete -f digistore-product-ms-k8-deployment.yaml/)
+                    sh(/minikube kubectl -- -n digistore delete -f digistore-product-ms-k8-deployment.yaml/)
                 }
                 echo "Undeployed"
             }
@@ -115,7 +115,7 @@ pipeline {
         stage('Deployment') {
             steps {
                 echo "Deployment Started"
-                sh(/minikube kubectl -- -n bank-apps create -f digistore-product-ms-k8-deployment.yaml/)
+                sh(/minikube kubectl -- -n digistore create -f digistore-product-ms-k8-deployment.yaml/)
                 echo "Deployment End"
             }
         }
@@ -123,7 +123,7 @@ pipeline {
         stage('Status') {
             steps {
                 echo "Status Started"
-                sh(/minikube kubectl -- -n bank-apps get all/)
+                sh(/minikube kubectl -- -n digistore get all/)
                 echo "Status End"
             }
         }
