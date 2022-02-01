@@ -2,8 +2,8 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    app: spring-boot-jwt
-  name: spring-boot-jwt
+    app: digistore-product-ms
+  name: digistore-product-ms
 spec:
   ports:
   - protocol: TCP
@@ -11,7 +11,7 @@ spec:
     port: 80
     targetPort: 80
   selector:
-    app: spring-boot-jwt
+    app: digistore-product-ms
   type: ClusterIP
 ---
 apiVersion: apps/v1
@@ -19,50 +19,32 @@ kind: Deployment
 metadata:
   creationTimestamp: null
   labels:
-    app: spring-boot-jwt
-  name: spring-boot-jwt
+    app: digistore-product-ms
+  name: digistore-product-ms
 spec:
   selector:
     matchLabels:
-      app: spring-boot-jwt
+      app: digistore-product-ms
   replicas: 1
   strategy: {}
   template:
     metadata:
       creationTimestamp: null
       labels:
-        app: spring-boot-jwt
+        app: digistore-product-ms
     spec:
       initContainers:
       - name: init-container
-        image: hub.docker.local:5000/alpine-jre-8:latest
+        image: localhost:5000/alpine-jre-8:latest
         command: ["java", "-version"]
       containers:
-      - name: spring-boot-jwt
-        image: hub.docker.local:5000/spring/spring-boot-jwt:latest
-        #lifecycle:
-        #  postStart:
-        #    exec:
-        #      #command: ["curl", "-X", "POST", "http://192.168.1.101:5050/", "-d", "started"]
-        #      command: 
-        #      - /bin/sh
-        #      - "-c"
-        #      - |
-        #        export currenttime=$(date) && export machinename=$(hostname) && curl -X POST http://192.168.1.101:5050/ -d "action=MS StartUp, time=$currenttime, host=$machinename"
-        #  preStop:
-        #    exec:
-        #      #command: ["curl", "-X", "POST", "http://192.168.1.101:5050/", "-d", "stopped"]
-        #      command: 
-        #      - /bin/sh
-        #      - "-c"
-        #      - |
-        #        export currenttime=$(date) && export machinename=$(hostname) && curl -X POST http://192.168.1.101:5050/ -d "action=MS Stopped, time=$currenttime, host=$machinename"
+      - name: digistore-product-ms
+        image: localhost:5000/digistore/digistore-product-ms:latest
         command: ["java"]
-        args: ["-Xmx128m", "-Xss1m", "-jar", "-Dconsole.level=INFO", "/opt/lib/spring-boot-jwt.jar"]
-
+        args: ["-Xmx128m", "-Xss1m", "-jar", "-Dconsole.level=INFO", "/opt/lib/digistore-product-ms.jar"]
         livenessProbe:
           httpGet:
-            path: /app/actuator
+            path: /product/actuator
             port: 80
             httpHeaders:
             - name: Content-Type
@@ -71,14 +53,8 @@ spec:
           initialDelaySeconds: 10
           periodSeconds: 10
         readinessProbe:
-        #  exec:
-        #    command:
-        #    - cat
-        #    - /tmp/healthy
-        #  initialDelaySeconds: 5
-        #  periodSeconds: 5
           httpGet:
-            path: /app/actuator
+            path: /product/actuator
             port: 80
           failureThreshold: 10
           initialDelaySeconds: 10
@@ -88,7 +64,6 @@ spec:
             port: 80
           initialDelaySeconds: 30
           periodSeconds: 10
-
         imagePullPolicy: "Always"
         ports:
         - containerPort: 80
@@ -105,54 +80,42 @@ status: {}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: spring-boot-jwt-ingress
-#  namespace: bank-apps
+  name: digistore-product-ms-ingress
   annotations:
-#    kubernetes.io/ingress.class: addon-http-application-routing
-    kubernetes.io/ingress.class: nginx
-
-    nginx.ingress.kubernetes.io/server-snippet: |
-      error_page 503 /error503;
-      error_page 404 /error404;
-      location /error404 {
-        return 202 'custom error page - 404';
-      }
-      location /error503 {
-        return 202 'custom error page - 503';
-      }
-
+    #kubernetes.io/ingress.class: nginx
 spec:
   rules:
-  - host: www.mybank.com
+  - host: www.digistore.com
     http:
       paths:
-      - path: /app
+      - path: /product
         pathType: Prefix
         backend:
           service:
-            name: spring-boot-jwt
-            port:
-              number: 80
-      - path: /app
-        pathType: Prefix
-        backend:
-          service:
-            name: spring-boot-jwt
-            port:
-              number: 80
-  - http:
-      paths:
-      - path: /app
-        pathType: Prefix
-        backend:
-          service:
-            name: spring-boot-jwt
+            name: digistore-product-ms
             port:
               number: 80
       - path: /
         pathType: Prefix
         backend:
           service:
-            name: spring-boot-jwt
+            name: digistore-frontend-ms
             port:
               number: 80
+  - http:
+      paths:
+      - path: /product
+        pathType: Prefix
+        backend:
+          service:
+            name: digistore-product-ms
+            port:
+              number: 80
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: digistore-frontend-ms
+            port:
+              number: 80
+
