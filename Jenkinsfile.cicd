@@ -105,7 +105,7 @@ pipeline {
             steps {
                 echo "Undeploying older service"
                 catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-                    sh(/minikube kubectl -- -n bank-apps delete -f spring-boot-jwt-k8-deployment2.yaml/)
+                    sh(/minikube kubectl -- -n bank-apps delete -f digistore-product-ms-k8-deployment.yaml/)
                 }
                 echo "Undeployed"
             }
@@ -115,7 +115,7 @@ pipeline {
         stage('Deployment') {
             steps {
                 echo "Deployment Started"
-                sh(/minikube kubectl -- -n bank-apps create -f spring-boot-jwt-k8-deployment2.yaml/)
+                sh(/minikube kubectl -- -n bank-apps create -f digistore-product-ms-k8-deployment.yaml/)
                 echo "Deployment End"
             }
         }
