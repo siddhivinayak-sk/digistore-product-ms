@@ -1,4 +1,4 @@
-# JWT Server - JWT Server for Token Generation and Resource for JWT token based access
+# DigiStore Product MS - A Java and Spring based micro-service created for demo
 
 ## Description
 This is a Spring Boot based server application which contains:
@@ -62,7 +62,7 @@ jwt.get.token.uri=/authenticate
 
 JWT Web
 ```
-Swagger UI: http://127.0.0.1:8080/app/swagger-ui/
+Swagger UI: http://127.0.0.1:8080/product/swagger-ui/
 Default username/pwd: admin/admin
 Token to be passed in Authorization Header as: Bearer <generated token>
 ```
