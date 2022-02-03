@@ -23,7 +23,7 @@ import com.sk.service.ProductService;
  */
 @RestController
 @RequestMapping("/v1/products")
-@CrossOrigin
+//@CrossOrigin
 public class ProductController {
 
 	@Autowired
