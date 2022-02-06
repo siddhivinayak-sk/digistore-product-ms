@@ -7,6 +7,7 @@ import java.util.stream.Stream;
 
 import javax.annotation.Resource;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -25,6 +26,10 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @Configuration
 @EnableSwagger2
 public class SwaggerConfiguration {
+	
+	@Value("${applicaiton.domain.url:127.0.0.1}")
+	private String domain;
+	
     @Bean
     public Docket productApi() {
         
@@ -36,6 +41,7 @@ public class SwaggerConfiguration {
 				.build();
         
         return new Docket(DocumentationType.SWAGGER_2)
+        		.host(domain)
         		.select()
         		.paths(PathSelectors.any())
         		.build()
