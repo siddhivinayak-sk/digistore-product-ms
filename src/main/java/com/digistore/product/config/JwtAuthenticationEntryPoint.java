@@ -1,4 +1,4 @@
-package com.sk.config;
+package com.digistore.product.config;
 
 import java.io.IOException;
 import java.io.Serializable;

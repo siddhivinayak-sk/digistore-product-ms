@@ -1,4 +1,4 @@
-package com.sk.service.impl;
+package com.digistore.product.service.impl;
 
 import java.util.List;
 import java.util.Optional;
@@ -8,11 +8,11 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.sk.entities.Product;
-import com.sk.model.ProductDTO;
-import com.sk.model.ResponseDTO;
-import com.sk.repositories.ProductRepository;
-import com.sk.service.ProductService;
+import com.digistore.product.entities.Product;
+import com.digistore.product.model.ProductDTO;
+import com.digistore.product.model.ResponseDTO;
+import com.digistore.product.repositories.ProductRepository;
+import com.digistore.product.service.ProductService;
 
 @Service
 public class ProductServiceImpl implements ProductService {

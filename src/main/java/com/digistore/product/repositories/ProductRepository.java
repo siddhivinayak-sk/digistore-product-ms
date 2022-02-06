@@ -1,9 +1,9 @@
-package com.sk.repositories;
+package com.digistore.product.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-import com.sk.entities.Product;
+import com.digistore.product.entities.Product;
 
 /**
  * 

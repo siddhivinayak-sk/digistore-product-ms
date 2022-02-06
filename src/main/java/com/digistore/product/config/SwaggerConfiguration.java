@@ -1,4 +1,4 @@
-package com.sk.config;
+package com.digistore.product.config;
 
 
 import java.util.List;
@@ -29,8 +29,8 @@ public class SwaggerConfiguration {
     public Docket productApi() {
         
     	ApiInfo apiInfo = new ApiInfoBuilder()
-    			.title("Title")
-    			.description("Description")
+    			.title("Digistore Product Microservice")
+    			.description("This microservice is part of Digistore application example. It has be created for demostration only. It cound not be used for any production needs.")
 				.contact(new Contact("Admin", "https://www.sk.com", "sk@test.com"))
 				.version("0.0.1")
 				.build();

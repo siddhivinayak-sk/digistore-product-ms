@@ -1,4 +1,4 @@
-package com.sk.model;
+package com.digistore.product.model;
 
 import java.io.Serializable;
 

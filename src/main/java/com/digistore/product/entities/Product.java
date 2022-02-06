@@ -1,4 +1,4 @@
-package com.sk.entities;
+package com.digistore.product.entities;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

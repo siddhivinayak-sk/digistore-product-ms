@@ -1,9 +1,9 @@
-package com.sk.service;
+package com.digistore.product.service;
 
 import java.util.List;
 
-import com.sk.model.ProductDTO;
-import com.sk.model.ResponseDTO;
+import com.digistore.product.model.ProductDTO;
+import com.digistore.product.model.ResponseDTO;
 
 /**
  * 

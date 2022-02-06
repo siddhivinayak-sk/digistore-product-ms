@@ -1,4 +1,4 @@
-package com.sk;
+package com.digistore.product;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -8,7 +8,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import static org.junit.Assert.assertEquals;
 
 @RunWith(MockitoJUnitRunner.class)
-public class SpringBootHelloWorldApplicationTest {
+public class DigistoreProductApplicationTest {
 
 	@Test
 	public void test1() {

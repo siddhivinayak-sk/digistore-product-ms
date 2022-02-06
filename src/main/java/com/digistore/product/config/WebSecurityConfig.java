@@ -1,4 +1,4 @@
-package com.sk.config;
+package com.digistore.product.config;
 
 import java.util.ArrayList;
 import java.util.Arrays;

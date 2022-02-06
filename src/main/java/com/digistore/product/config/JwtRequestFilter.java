@@ -1,4 +1,4 @@
-package com.sk.config;
+package com.digistore.product.config;
 
 import java.io.IOException;
 
@@ -15,7 +15,7 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.sk.service.JwtUserDetailsService;
+import com.digistore.product.service.JwtUserDetailsService;
 
 import io.jsonwebtoken.ExpiredJwtException;
 

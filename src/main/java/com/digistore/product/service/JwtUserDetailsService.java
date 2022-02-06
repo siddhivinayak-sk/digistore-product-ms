@@ -1,4 +1,4 @@
-package com.sk.service;
+package com.digistore.product.service;
 
 import java.util.Arrays;
 
@@ -10,7 +10,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import com.sk.repositories.UserRepository;
+import com.digistore.product.repositories.UserRepository;
 
 @Service
 public class JwtUserDetailsService implements UserDetailsService {
@@ -20,7 +20,7 @@ public class JwtUserDetailsService implements UserDetailsService {
 	
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		com.sk.entities.User user = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
+		com.digistore.product.entities.User user = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
 		return new User(user.getUsername(), user.getPassword(), true, true, true, true, Arrays.asList(new SimpleGrantedAuthority(user.getRole())));
 	}
 
