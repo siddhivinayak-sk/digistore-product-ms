@@ -47,7 +47,7 @@ pipeline {
         stage('Result') {
             steps {
                 echo "Result Started"
-                junit '**/target/surefire-reports/TEST-*.xml'
+                junit allowEmptyResults: true,  skipPublishingChecks: true, testResults: '**/target/surefire-reports/TEST-*.xml'
                 echo "Result End"
             }
         }
