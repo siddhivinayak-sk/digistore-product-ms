@@ -416,5 +416,8 @@ cd /apps/jenkinsagent1
 6. Clean up artifacts
 
 
+# How to configure Jenkins pipeline waiting for SonarQube Quality Gate result
+https://www.jenkins.io/doc/pipeline/steps/sonar/
+
 
 
