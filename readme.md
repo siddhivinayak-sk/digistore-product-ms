@@ -416,8 +416,14 @@ cd /apps/jenkinsagent1
 6. Clean up artifacts
 
 
-# How to configure Jenkins pipeline waiting for SonarQube Quality Gate result
+### How to configure Jenkins pipeline waiting for SonarQube Quality Gate result
 https://www.jenkins.io/doc/pipeline/steps/sonar/
+
+### How to configure web hook in JIRA to invoke build pipeline
+https://plugins.jenkins.io/jira-trigger/
+https://confluence.atlassian.com/jirakb/trigger-the-jenkins-build-from-jira-automation-1036061474.html
+https://wiki.jenkins-ci.org/display/JENKINS/Remote+access+API
+
 
 
 
