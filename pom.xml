@@ -22,7 +22,7 @@
 		<sonar.host.url>http://www.mysonar.com:9000/</sonar.host.url>
 		<sonar.tests>src/test/java</sonar.tests>
 		<sonar.login>admin</sonar.login>
-		<sonar.password>root</sonar.password>
+		<sonar.password>raviadmin@123</sonar.password>
 	</properties>
 
 	<dependencies>
