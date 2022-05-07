@@ -14,3 +14,13 @@
                 echo "Tag Image End"
             }
         }
+
+
+
+        stage('Push Image') {
+            steps {
+                echo "Push Image Started"
+                sh(/docker push /)
+                echo "Push Image End"
+            }
+        }
