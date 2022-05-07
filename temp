@@ -1,26 +1,96 @@
-        stage('Build Image') {
-            steps {
-                echo "Build Image Started"
-                sh(/mvn -file pom.xml package -Dmaven.test.skip=true/)
-                sh(/docker build --build-arg VER=${jarVersion} -f dockerfile -t ms1:latest ./)
-                echo "Build Image End"
-            }
-        }
-        
-        stage('Tag Image') {
-            steps {
-                echo "Tag Image Started"
-                sh(/docker tag ms1:latest docker.io\/raviaccount\/ms1:latest/)
-                echo "Tag Image End"
-            }
-        }
-
-
-
-        stage('Push Image') {
-            steps {
-                echo "Push Image Started"
-                sh(/docker push /)
-                echo "Push Image End"
-            }
-        }
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: ms1
+  name: ms1
+spec:
+  ports:
+  - protocol: TCP
+    name: "80"
+    port: 80
+    targetPort: 80
+  selector:
+    app: ms1
+  type: ClusterIP
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: ms1
+  name: ms1
+spec:
+  selector:
+    matchLabels:
+      app: ms1
+  replicas: 1
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: ms1
+    spec:
+      initContainers:
+      - name: init-container
+        image: openjdk:8-jre-alpine
+        command: ["java", "-version"]
+      containers:
+      - name: ms1
+        image: 0daman/ms1:latest
+        command: ["java"]
+        args: ["-Xmx128m", "-Xss1m", "-jar", "-Dconsole.level=INFO", "/opt/lib/ms1.jar"]
+        livenessProbe:
+          httpGet:
+            path: /actuator
+            port: 80
+            httpHeaders:
+            - name: Content-Type
+              value: plain/text
+          failureThreshold: 10
+          initialDelaySeconds: 10
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /actuator
+            port: 80
+          failureThreshold: 10
+          initialDelaySeconds: 10
+          periodSeconds: 10
+        startupProbe:
+          tcpSocket:
+            port: 80
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        imagePullPolicy: "Always"
+        ports:
+        - containerPort: 80
+        resources:
+          limits:
+            cpu: "1"
+            memory: "1073741824"
+          requests:
+            cpu: 250m
+            memory: "536870912"
+      restartPolicy: Always
+status: {}
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ms1-ingress
+  annotations:
+    #kubernetes.io/ingress.class: nginx
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: ms1
+            port:
+              number: 80
