@@ -1,0 +1,16 @@
+        stage('Build Image') {
+            steps {
+                echo "Build Image Started"
+                sh(/mvn -file pom.xml package -Dmaven.test.skip=true/)
+                sh(/docker build --build-arg VER=${jarVersion} -f dockerfile -t ms1:latest ./)
+                echo "Build Image End"
+            }
+        }
+        
+        stage('Tag Image') {
+            steps {
+                echo "Tag Image Started"
+                sh(/docker tag ms1:latest docker.io\/raviaccount\/ms1:latest/)
+                echo "Tag Image End"
+            }
+        }
