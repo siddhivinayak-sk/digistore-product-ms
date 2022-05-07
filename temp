@@ -1,96 +1,35 @@
-apiVersion: v1
-kind: Service
-metadata:
-  labels:
-    app: ms1
-  name: ms1
-spec:
-  ports:
-  - protocol: TCP
-    name: "80"
-    port: 80
-    targetPort: 80
-  selector:
-    app: ms1
-  type: ClusterIP
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  creationTimestamp: null
-  labels:
-    app: ms1
-  name: ms1
-spec:
-  selector:
-    matchLabels:
-      app: ms1
-  replicas: 1
-  strategy: {}
-  template:
-    metadata:
-      creationTimestamp: null
-      labels:
-        app: ms1
-    spec:
-      initContainers:
-      - name: init-container
-        image: openjdk:8-jre-alpine
-        command: ["java", "-version"]
-      containers:
-      - name: ms1
-        image: 0daman/ms1:latest
-        command: ["java"]
-        args: ["-Xmx128m", "-Xss1m", "-jar", "-Dconsole.level=INFO", "/opt/lib/ms1.jar"]
-        livenessProbe:
-          httpGet:
-            path: /actuator
-            port: 80
-            httpHeaders:
-            - name: Content-Type
-              value: plain/text
-          failureThreshold: 10
-          initialDelaySeconds: 10
-          periodSeconds: 10
-        readinessProbe:
-          httpGet:
-            path: /actuator
-            port: 80
-          failureThreshold: 10
-          initialDelaySeconds: 10
-          periodSeconds: 10
-        startupProbe:
-          tcpSocket:
-            port: 80
-          initialDelaySeconds: 30
-          periodSeconds: 10
-        imagePullPolicy: "Always"
-        ports:
-        - containerPort: 80
-        resources:
-          limits:
-            cpu: "1"
-            memory: "1073741824"
-          requests:
-            cpu: 250m
-            memory: "536870912"
-      restartPolicy: Always
-status: {}
----
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: ms1-ingress
-  annotations:
-    #kubernetes.io/ingress.class: nginx
-spec:
-  rules:
-  - http:
-      paths:
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: ms1
-            port:
-              number: 80
+        stage('Status Before Deployment') {
+            steps {
+                echo "Checking older service"
+                sh(/minikube kubectl -- -n ms get all/)
+                echo "Checked"
+            }
+        }
+
+        stage('Clean Up') {
+            steps {
+                echo "Undeploying older service"
+                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+                   sh(/minikube kubectl -- -n ms delete -f deployment.yaml/)
+                }
+                echo "Undeployed"
+            }
+        }
+
+        stage('Deployment') {
+            steps {
+                echo "Deployment Started"
+                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+                  sh(/minikube kubectl -- -n ms create -f deployment.yaml/)
+                }
+                echo "Deployment End"
+            }
+        }
+
+        stage('Status') {
+            steps {
+                echo "Status Started"
+                sh(/minikube kubectl -- -n ms get all/)
+                echo "Status End"
+            }
+        }
