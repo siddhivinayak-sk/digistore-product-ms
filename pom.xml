@@ -25,16 +25,18 @@
 		<sonar.password>root</sonar.password>
 	</properties>
 
-	<repository>
-		<id>ripu0544</id>
-		<url>https://pkgs.dev.azure.com/ripu0544/_packaging/ripu0544/maven/v1</url>
-		<releases>
-			<enabled>true</enabled>
-		</releases>
-		<snapshots>
-			<enabled>true</enabled>
-		</snapshots>
-	</repository>
+	<repositories>
+		<repository>
+			<id>ripu0544</id>
+			<url>https://pkgs.dev.azure.com/ripu0544/_packaging/ripu0544/maven/v1</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
+	</repositories>
 
 	<dependencies>
 		<dependency>
