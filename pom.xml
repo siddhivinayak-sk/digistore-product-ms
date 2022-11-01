@@ -25,6 +25,17 @@
 		<sonar.password>root</sonar.password>
 	</properties>
 
+	<repository>
+		<id>ripu0544</id>
+		<url>https://pkgs.dev.azure.com/ripu0544/_packaging/ripu0544/maven/v1</url>
+		<releases>
+			<enabled>true</enabled>
+		</releases>
+		<snapshots>
+			<enabled>true</enabled>
+		</snapshots>
+	</repository>
+
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -190,12 +201,25 @@
 	
 	
 	<distributionManagement>
+		<!--
 		<repository>
 			<uniqueVersion>false</uniqueVersion>
 			<id>releases2</id>
 			<name>maven-releases</name>
 			<url>http://www.mynexus.com:8081/repository/maven-releases/</url>
 		</repository>
+		-->
+
+		<repository>
+			<id>ripu0544</id>
+			<url>https://pkgs.dev.azure.com/ripu0544/_packaging/ripu0544/maven/v1</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>		
 	</distributionManagement>
 	
 	
